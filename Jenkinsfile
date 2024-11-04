@@ -22,11 +22,10 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Testing.."
-                sh '''
-                cd myapp
-                python3 hello.py
-                python3 hello.py --name=Sam
-                '''
+                dir('myapp') {
+                    // Activate the virtual environment before running tests
+                    sh '. venv/bin/activate && python3 hello.py'
+                }
             }
         }
         stage('Deliver') {
