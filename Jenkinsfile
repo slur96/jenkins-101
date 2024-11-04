@@ -5,16 +5,18 @@ pipeline {
             }
       }
     triggers {
-        pollSCM '*/5 * * * *'
+        pollSCM '* * * * *'
     }
     stages {
         stage('Build') {
             steps {
                 echo "Building.."
-                sh '''
-                cd myapp
-                pip install -r requirements.txt
-                '''
+                dir('myapp') {
+                    // Set up virtual environment
+                    sh 'python3 -m venv venv'
+                    // Activate the virtual machine and install dependencies
+                    sh '. venv/bin/activate && pip install -r requirements.txt'
+                }
             }
         }
         stage('Test') {
